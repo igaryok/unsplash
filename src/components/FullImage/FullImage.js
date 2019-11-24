@@ -5,15 +5,18 @@ import {
   Image, 
   StyleSheet, 
   Button, 
-  ActivityIndicator } from 'react-native';
+  ActivityIndicator,
+  Text } from 'react-native';
 
 export const FullImage = ({setShowFullImage, fullImageUrl}) =>  {
   const [onLoad, changeOnLoad] = useState(false);
+  const [errorLoad, changeErrorLoad] = useState(false);
   const { 
     img, 
     containerIndicator, 
     horizontal, 
-    mainContainer } = styles;
+    mainContainer,
+    textError } = styles;
 
   return (
     <View >
@@ -28,17 +31,22 @@ export const FullImage = ({setShowFullImage, fullImageUrl}) =>  {
               title='CLOSE PHOTO'
               color='grey'
             />
-            {onLoad && (
+            {onLoad && !errorLoad && (
               <View style={[containerIndicator, horizontal]}>
                 <ActivityIndicator size="large" color="#0000ff" />
               </View>
             )}
-            <Image 
-              style={img}
-              source={{ uri: fullImageUrl }}
-              onLoadStart={() => changeOnLoad(true)}
-              onLoadEnd={() => changeOnLoad(false)}
-            />
+           
+            {errorLoad  
+              ? <Text style={textError}>Sorry, somthing was wrong!</Text>
+              : <Image 
+                  style={img}
+                  source={{ uri: fullImageUrl }}
+                  onLoadStart={() => changeOnLoad(true)}
+                  onLoadEnd={() => changeOnLoad(false)}
+                  onError={() => changeErrorLoad(true)}
+                />
+              }
           </View>
         </View>
       </Modal>
@@ -63,4 +71,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginTop: 100
   },
+  textError: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: 'red',
+  }
 }); 
