@@ -56,6 +56,6 @@ export const loadPhotos = (page) => (dispatch) => {
   fetch(`${BASE_URL}?client_id=${CLIENT_ID}&page=${page}`)
     .then(response => response.json())
     .then(data => dispatch(savePhotos(data)))
-    .catch(error => dispatch(setLoadingError(error)))
+    .catch(error => {dispatch(setLoadingError(error))})
     .finally(() => {dispatch(stopLoading())});   
 }

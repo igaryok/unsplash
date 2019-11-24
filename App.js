@@ -1,15 +1,17 @@
-import React from 'react';
-import { Text, View } from 'react-native';
-import { Provider } from 'react-redux';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
-import { ImageList } from './src/components/ImagesList';
-import { store } from './src/store';
+import { MainScreen } from './src/screens/Main';
+import { StartScreen } from './src/screens/Start';
 
-export default App = () => {
-  
-    return (
-      <Provider store={store}>
-        <ImageList />
-      </Provider>
-    );
+const AppNavigator = createStackNavigator(
+  {
+    StartScreen,
+    MainScreen,
+  },
+  {
+    initialRouteName: 'StartScreen',
   }
+);
+
+export default createAppContainer(AppNavigator);

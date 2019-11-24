@@ -3,11 +3,12 @@ import {
   FlatList, 
   View, 
   StyleSheet, 
-  ActivityIndicator, 
-  Button } from 'react-native';
+  ActivityIndicator } from 'react-native';
 
 import { ImageItem } from '../ImageItem';
 import { FullImage } from '../FullImage';
+import { FooterButtons } from '../FooterButtons';
+import { ErrorLoad } from '../ErrorLoad';
 
 
 export class ImageList extends PureComponent {
@@ -18,10 +19,9 @@ export class ImageList extends PureComponent {
   };
 
   componentDidUpdate(prevProps){
-    const { listPhotos } = this.props;
 
     if (prevProps.currentPage !== this.props.currentPage) {
-      listPhotos && this.flatListRef.scrollToIndex({animated: true, index: 0});
+      this.flatListRef.scrollToIndex({animated: true, index: 0});
     }
   }
   
@@ -30,9 +30,7 @@ export class ImageList extends PureComponent {
       listPhotos, 
       selectShowFullImage, 
       error, 
-      isLoading, 
-      loadPhotos, 
-      currentPage } = this.props;
+      isLoading} = this.props;
     const { 
       mainBlock, 
       container, 
@@ -45,32 +43,28 @@ export class ImageList extends PureComponent {
             <ActivityIndicator size="large" color="#0000ff" />
           </View>
         )}
-        <FlatList 
-          data={listPhotos}
-          ref={(ref) => { this.flatListRef = ref; }}
-          keyExtractor={item => item.id}
-          renderItem={
-            ({ item }) => (
-              <ImageItem 
-                name={item.description||item.alt_description} 
-                username={item.user.username} 
-                imageThumbUrl={item.urls.thumb} 
-                imageFullUrl={item.urls.full} 
+        {!error
+          ? <>
+              <FlatList 
+                data={listPhotos}
+                ref={(ref) => { this.flatListRef = ref; }}
+                keyExtractor={item => item.id}
+                renderItem={
+                  ({ item }) => (
+                    <ImageItem 
+                      name={item.description||item.alt_description} 
+                      username={item.user.username} 
+                      imageThumbUrl={item.urls.thumb} 
+                      imageFullUrl={item.urls.full} 
+                    />
+                  )
+                }
               />
-            )
-          }
-        />
-         <View style={styles.fixToText}>
-          <Button
-            title="Previous 10 photos"
-            disabled={currentPage === 1 ? true : false}
-            onPress={() => loadPhotos(currentPage - 1)}
-          />
-          <Button
-            title="Next 10 photos"
-            onPress={() => loadPhotos(currentPage + 1)}
-          />
-        </View>
+              <FooterButtons />
+            </>
+          : <ErrorLoad />
+        }
+
         {selectShowFullImage && <FullImage />}
       </View>
     );
@@ -92,10 +86,4 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginTop: 100
   },
-  fixToText: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 5,
-  },
 });
-

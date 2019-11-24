@@ -35,7 +35,7 @@ export function rootReducer(state = initialState, action) {
       });
     };
 
-    case ACTIONS_TYPES.SET_LOAD_RESTAURANTS_ERROR: {
+    case ACTIONS_TYPES.SET_LOAD_ERROR : {
       const { payload } = action;
 
       return ({
