@@ -9,7 +9,6 @@ npm-debug.*
 *.orig.*
 web-build/
 web-report/
-assets/
 babel.config.js
 .expo-shared/
 
